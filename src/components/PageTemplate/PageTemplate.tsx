@@ -1,4 +1,5 @@
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
+import { composeContent } from "../../utils/composeContent.tsx";
 
 const PageTemplate = (props: {
   mainImage: any;
@@ -48,15 +49,15 @@ const PageTemplate = (props: {
           overflowY: "auto",
           maxHeight: "calc(100vh - 10vh - 80px)", // Leaves room for header & footer
           padding: "0 !important",
+          scrollbarWidth: "none",
+          msOverflowStyle: "",
         }}
       >
         {/* Top section (5vh height inside container) */}
         <Box
           sx={{
-            height: "5vh",
-            backgroundColor: "#f5f5f5",
             borderRadius: 1,
-            mb: 2,
+            marginBottom: 0,
           }}
         >
           {props.mainImage}
@@ -65,12 +66,11 @@ const PageTemplate = (props: {
         {/* Main content area */}
         <Box
           sx={{
-            minHeight: "50vh",
-            padding: "24px",
+            minHeight: "15vh",
+            padding: "0px 24px 24px 24px",
           }}
         >
-          {" "}
-          {props.content}
+          {composeContent(props.content)}
         </Box>
       </Container>
 

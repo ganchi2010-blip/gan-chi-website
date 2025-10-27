@@ -8,7 +8,7 @@ export interface ContentItem {
 
 export function useContent(
   websiteRef: string = "pages",
-  pageRef: string = "main-page",
+  websiteSectionRef: string = "main-page",
   languageRef: string = "en"
 ): Record<string, ContentItem> {
   const [content, setContent] = useState<Record<string, ContentItem>>({});
@@ -16,7 +16,7 @@ export function useContent(
   useEffect(() => {
     const contentRef = ref(
       db,
-      `content/website-content/${websiteRef}/${pageRef}/${languageRef}`
+      `content/website-content/${websiteRef}/${websiteSectionRef}/${languageRef}`
     );
 
     const unsubscribe: Unsubscribe = onValue(contentRef, (snapshot) => {
@@ -30,7 +30,7 @@ export function useContent(
     });
 
     return () => unsubscribe();
-  }, [websiteRef, pageRef, languageRef]);
+  }, [websiteRef, websiteSectionRef, languageRef]);
 
   return content;
 }

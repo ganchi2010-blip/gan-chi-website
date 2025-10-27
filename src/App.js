@@ -1,13 +1,18 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useContent } from "./databaseUtils/getContent.tsx";
 import PageTemplate from "./components/PageTemplate/PageTemplate.tsx";
 import Header from "./components/Header/Header.tsx";
 import imageLogo from "./assets/logo.png";
+import imageBanner from "./assets/banner-image-cropped.jpeg";
 import { Box } from "@mui/material";
 
 function App() {
-  useEffect(() => {});
+  const mainPageCntnt = useContent("pages", "main-page", "en");
+  const menuItemsCntnt = useContent("header", "menu-items", "en");
+
+  console.log(mainPageCntnt);
+  console.log(menuItemsCntnt);
 
   const menuItems = [
     { label: "OUR MENU", onClick: () => console.log("1") },
@@ -41,7 +46,15 @@ function App() {
         </a>
       </header> */}
       <PageTemplate
-        header={<Header logo={logo} menuItems={menuItems} />}
+        header={<Header logo={logo} menuItems={menuItemsCntnt} />}
+        mainImage={
+          <img
+            src={imageBanner}
+            alt={"banner-image"}
+            style={{ width: "100%" }}
+          />
+        }
+        content={mainPageCntnt}
       ></PageTemplate>
     </div>
   );

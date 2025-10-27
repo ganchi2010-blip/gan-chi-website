@@ -15,14 +15,9 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { ganChiTitle } from "../../constants/classNames";
 
-interface MenuItem {
-  label: string;
-  onClick: () => void;
-}
-
 interface HeaderProps {
   logo: React.ReactNode;
-  menuItems: MenuItem[];
+  menuItems: Record<string, string>;
 }
 
 const Header = ({ logo, menuItems }: HeaderProps) => {
@@ -49,16 +44,16 @@ const Header = ({ logo, menuItems }: HeaderProps) => {
               <MenuIcon />
             </IconButton>
           ) : (
-            <Box display="flex" gap={3}>
-              {menuItems.map((item, index) => (
+            <Box display="flex" gap={4}>
+              {Object.entries(menuItems).map(([id, label]) => (
                 <Typography
                   className={ganChiTitle}
-                  key={index}
+                  key={id}
                   variant="button"
                   sx={{ cursor: "pointer" }}
-                  onClick={item.onClick}
+                  // onClick={item.onClick}
                 >
-                  {item.label}
+                  {label}
                 </Typography>
               ))}
             </Box>
@@ -75,14 +70,14 @@ const Header = ({ logo, menuItems }: HeaderProps) => {
           onKeyDown={toggleDrawer}
         >
           <List>
-            {menuItems.map((item, index) => (
+            {Object.entries(menuItems).map(([id, label]) => (
               <ListItem
-                key={index}
+                key={id}
                 component="div" // Make ListItem render as a divv
-                onClick={item.onClick}
+                // onClick={item.onClick}
                 sx={{ cursor: "pointer" }}
               >
-                <ListItemText primary={item.label} className={ganChiTitle} />
+                <ListItemText primary={label} className={ganChiTitle} />
               </ListItem>
             ))}
           </List>
