@@ -14,7 +14,8 @@ const PageTemplate = (props: {
   return (
     <Box
       sx={{
-        position: "relative",
+        position: "absolute",
+        top: "0",
         minHeight: "100vh",
         width: "100%",
         backgroundImage: `url('https://i.postimg.cc/h4H5D2RT/clouds-subtle-gradient-blue-sky-background-stock-vector-189483-490.avif')`, // Replace with your image path
@@ -22,6 +23,7 @@ const PageTemplate = (props: {
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         overflow: "hidden",
+        paddingTop: "110px",
       }}
     >
       {/* Header placeholder */}

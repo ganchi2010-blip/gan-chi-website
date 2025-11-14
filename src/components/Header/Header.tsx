@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { ganChiTitle } from "../../constants/classNames";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   logo: React.ReactNode;
@@ -24,12 +25,26 @@ const Header = ({ logo, menuItems }: HeaderProps) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
+  const isMobileOrTablet = useMediaQuery(theme.breakpoints.down("md"));
+  const contentWidth = isMobileOrTablet ? "90vw" : "55vw";
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
+  const navigate = useNavigate();
   return (
     <>
-      <AppBar position="static" color="transparent" elevation={0}>
+      <AppBar
+        position="static"
+        color="transparent"
+        elevation={0}
+        sx={{
+          position: "absolute",
+          zIndex: 999,
+          width: contentWidth,
+          mx: "auto",
+          left: 0,
+          right: 0,
+          top: 10,
+        }}
+      >
         <Toolbar
           sx={{ justifyContent: "space-between", padding: "0 !important" }}
         >
@@ -47,6 +62,9 @@ const Header = ({ logo, menuItems }: HeaderProps) => {
             <Box display="flex" gap={4}>
               {Object.entries(menuItems).map(([id, label]) => (
                 <Typography
+                  onClick={() =>
+                    navigate(label.toLowerCase().replaceAll(" ", "-"))
+                  }
                   className={ganChiTitle}
                   key={id}
                   variant="button"

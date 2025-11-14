@@ -6,56 +6,112 @@ import Header from "./components/Header/Header.tsx";
 import imageLogo from "./assets/logo.png";
 import imageBanner from "./assets/banner-image-cropped.jpeg";
 import { Box } from "@mui/material";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 function App() {
   const mainPageCntnt = useContent("pages", "main-page", "en");
+  const storyPageCntnt = useContent("pages", "story-page", "en");
   const menuItemsCntnt = useContent("header", "menu-items", "en");
 
   console.log(mainPageCntnt);
   console.log(menuItemsCntnt);
 
-  const menuItems = [
-    { label: "OUR MENU", onClick: () => console.log("1") },
-    { label: "DOWNLOAD APP", onClick: () => console.log("2") },
-    { label: "BLOG", onClick: () => console.log("3") },
-    { label: "OUR STORY", onClick: () => console.log("4") },
-  ];
+  const navigate = useNavigate();
 
   const logo = (
-    <Box display="flex" alignItems="center" sx={{ width: "100px" }}>
+    <Box
+      display="flex"
+      alignItems="center"
+      sx={{ width: "100px", cursor: "pointer" }}
+      onClick={() => navigate("/")}
+    >
       <img src={imageLogo} alt="logo" style={{ width: "100%" }}></img>
     </Box>
   );
 
-  // console.log(useContent());
   useContent();
+
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
-      <PageTemplate
-        header={<Header logo={logo} menuItems={menuItemsCntnt} />}
-        mainImage={
-          <img
-            src={imageBanner}
-            alt={"banner-image"}
-            style={{ width: "100%" }}
-          />
-        }
-        content={mainPageCntnt}
-      ></PageTemplate>
+      {/* Same header appears on all pages */}
+      <Header logo={logo} menuItems={menuItemsCntnt} />
+
+      {/* Routing */}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={mainPageCntnt}
+            />
+          }
+        />
+
+        <Route
+          path="/our-menu"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={{}}
+            />
+          }
+        />
+        <Route
+          path="/download-app"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={{}}
+            />
+          }
+        />
+        <Route
+          path="/our-social-media"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={{}}
+            />
+          }
+        />
+        <Route
+          path="/our-blog"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={{}}
+            />
+          }
+        />
+        <Route
+          path="/our-story"
+          element={
+            <PageTemplate
+              header={null}
+              mainImage={
+                <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
+              }
+              content={storyPageCntnt}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }

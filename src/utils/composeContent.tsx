@@ -20,6 +20,11 @@ export function composeContent(obj: Record<string, any>) {
       composedContent.push(composeTitle(value));
     }
 
+    /// Story section Component
+    if (key.indexOf("-our-story-section") > -1) {
+      composedContent.push(composeStorySection(value));
+    }
+
     /// Food Menu Illustrated Component
     if (key.indexOf("-food-menu-illustrated") > -1 && !foodMenuIllComposed) {
       let foodMenuContent: JSX.Element[] = [];
@@ -119,6 +124,17 @@ function composeFoodMenuIllItem(
           {foodMenuIllObj["b-text"]}
         </span>
       </Box>
+    </Box>
+  );
+}
+
+function composeStorySection(obj: any) {
+  console.log(obj);
+  return (
+    <Box sx={{ paddingBottom: "40px" }}>
+      {Object.keys(obj).map(function (key, index) {
+        if (key.indexOf("-paragraph") > -1) return <div>{obj[key]}</div>;
+      })}
     </Box>
   );
 }
