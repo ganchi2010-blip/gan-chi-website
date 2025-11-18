@@ -4,17 +4,19 @@ import { useContent } from "./databaseUtils/getContent.tsx";
 import PageTemplate from "./components/PageTemplate/PageTemplate.tsx";
 import Header from "./components/Header/Header.tsx";
 import imageLogo from "./assets/logo.png";
+import socialMediaImg from "./assets/social-media.png";
 import imageBanner from "./assets/banner-image-cropped.jpeg";
 import { Box } from "@mui/material";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 function App() {
   const mainPageCntnt = useContent("pages", "main-page", "en");
+  const menuPageCntnt = useContent("pages", "menu-page", "en");
   const storyPageCntnt = useContent("pages", "story-page", "en");
   const menuItemsCntnt = useContent("header", "menu-items", "en");
 
   console.log(mainPageCntnt);
-  console.log(menuItemsCntnt);
+  console.log(menuPageCntnt);
 
   const navigate = useNavigate();
 
@@ -59,7 +61,7 @@ function App() {
               mainImage={
                 <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
               }
-              content={{}}
+              content={menuPageCntnt}
             />
           }
         />
@@ -83,7 +85,13 @@ function App() {
               mainImage={
                 <img src={imageBanner} alt="banner" style={{ width: "100%" }} />
               }
-              content={{}}
+              content={{
+                "asset-image": {
+                  src: socialMediaImg,
+                  alt: "social-media-image",
+                  style: { width: "40%" },
+                },
+              }}
             />
           }
         />

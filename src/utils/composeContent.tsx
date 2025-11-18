@@ -3,12 +3,24 @@ import { JSX } from "react";
 import spicyKoreanIllustration from "../assets/spicy-korean.jpeg";
 import honeyGarlicIllustration from "../assets/honey-garlic.jpeg";
 import mapleGingerIllustration from "../assets/maple-ginger.jpeg";
+import spicyKoreanImg from "../assets/spicy-korean-img.jpg";
+import honeyGarlicImg from "../assets/honey-garlic-img.jpg";
+import mapleGingerImg from "../assets/maple-ginger-img.jpg";
 
 export function composeContent(obj: Record<string, any>) {
   let composedContent: JSX.Element[] = [];
   let foodMenuIllComposed = false;
+  let foodMenuImgComposed = false;
+
   Object.entries(obj).map(([key, value]) => {
     ///
+    /// Asset Image
+    if (key.indexOf("asset-image") > -1) {
+      composedContent.push(
+        <img src={value.src} alt={value.alt} style={value.style}></img>
+      );
+    }
+
     /// Button Component
     if (key.indexOf("-button") > -1) {
       composedContent.push(composeButton(value));
@@ -38,6 +50,21 @@ export function composeContent(obj: Record<string, any>) {
       );
       composedContent.push(composeFoodMenuIllRow(foodMenuContent));
       foodMenuIllComposed = true;
+    }
+
+    /// Food Menu Image Component
+    if (key.indexOf("-food-menu-image") > -1 && !foodMenuImgComposed) {
+      let foodMenuContent: JSX.Element[] = [];
+      const foodMenuIllItems = Object.fromEntries(
+        Object.entries(obj).filter(([k]) => k.indexOf("-food-menu-image") > -1)
+      );
+      Object.entries(foodMenuIllItems).map(([itemKey, itemValue]) =>
+        foodMenuContent.push(composeFoodMenuImgItem(itemKey, itemValue))
+      );
+      composedContent.push(composeFoodMenuIllRow(foodMenuContent));
+      composedContent.push(<div style={{ height: "70px" }} />);
+
+      foodMenuImgComposed = true;
     }
   });
   return composedContent;
@@ -118,6 +145,39 @@ function composeFoodMenuIllItem(
         }}
         src={illustration(foodMenuIllKey)}
         alt={foodMenuIllKey}
+      />
+      <Box>
+        <span style={{ color: "gray", fontSize: "0.9rem" }}>
+          {foodMenuIllObj["b-text"]}
+        </span>
+      </Box>
+    </Box>
+  );
+}
+
+function composeFoodMenuImgItem(
+  foodMenuIllKey: string,
+  foodMenuIllObj: Record<string, string>
+) {
+  const image = (id: string) => {
+    if (id?.indexOf("korean-spicy") > -1) return spicyKoreanImg;
+    if (id?.indexOf("honey-garlic") > -1) return honeyGarlicImg;
+    if (id?.indexOf("maple-ginger") > -1) return mapleGingerImg;
+  };
+  return (
+    <Box>
+      <Box
+        style={{
+          height: "12vw",
+          width: "12vw",
+          borderRadius: "50px",
+          marginBottom: "10px",
+          backgroundImage: "url(" + image(foodMenuIllKey) + ")",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+        // src={illustration(foodMenuIllKey)}
+        // alt={foodMenuIllKey}
       />
       <Box>
         <span style={{ color: "gray", fontSize: "0.9rem" }}>

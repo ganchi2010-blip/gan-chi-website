@@ -1,5 +1,6 @@
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import { composeContent } from "../../utils/composeContent.tsx";
+import bg from "../../assets/background.png";
 
 const PageTemplate = (props: {
   mainImage: any;
@@ -18,7 +19,8 @@ const PageTemplate = (props: {
         top: "0",
         minHeight: "100vh",
         width: "100%",
-        backgroundImage: `url('https://i.postimg.cc/h4H5D2RT/clouds-subtle-gradient-blue-sky-background-stock-vector-189483-490.avif')`, // Replace with your image path
+        backgroundImage: `url(${bg})`,
+        backgroundColor: "#58b6f5",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
