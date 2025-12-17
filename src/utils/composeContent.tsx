@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import { JSX } from "react";
 import spicyKoreanIllustration from "../assets/spicy-korean.jpeg";
 import honeyGarlicIllustration from "../assets/honey-garlic.jpeg";
@@ -6,8 +6,12 @@ import mapleGingerIllustration from "../assets/maple-ginger.jpeg";
 import spicyKoreanImg from "../assets/spicy-korean-img.jpg";
 import honeyGarlicImg from "../assets/honey-garlic-img.jpg";
 import mapleGingerImg from "../assets/maple-ginger-img.jpg";
+import FadeUp from "../components/FadeUp/FadeUp";
 
-export function composeContent(obj: Record<string, any>) {
+export function composeContent(
+  obj: Record<string, any>,
+  isMobileOrTablet: boolean
+) {
   let composedContent: JSX.Element[] = [];
   let foodMenuIllComposed = false;
   let foodMenuImgComposed = false;
@@ -17,13 +21,19 @@ export function composeContent(obj: Record<string, any>) {
     /// Asset Image
     if (key.indexOf("asset-image") > -1) {
       composedContent.push(
-        <img src={value.src} alt={value.alt} style={value.style}></img>
+        <FadeUp>
+          <img
+            src={value.src}
+            alt={value.alt}
+            style={{ width: isMobileOrTablet ? "100%" : "40%" }}
+          ></img>
+        </FadeUp>
       );
     }
 
     /// Button Component
     if (key.indexOf("-button") > -1) {
-      composedContent.push(composeButton(value));
+      composedContent.push(composeButton(value, isMobileOrTablet));
       composedContent.push(composeSpaceBox());
     }
 
@@ -33,8 +43,8 @@ export function composeContent(obj: Record<string, any>) {
     }
 
     /// Story section Component
-    if (key.indexOf("-our-story-section") > -1) {
-      composedContent.push(composeStorySection(value));
+    if (key.indexOf("-section") > -1) {
+      composedContent.push(composeTextSection(value));
     }
 
     /// Food Menu Illustrated Component
@@ -46,9 +56,13 @@ export function composeContent(obj: Record<string, any>) {
         )
       );
       Object.entries(foodMenuIllItems).map(([itemKey, itemValue]) =>
-        foodMenuContent.push(composeFoodMenuIllItem(itemKey, itemValue))
+        foodMenuContent.push(
+          composeFoodMenuIllItem(itemKey, itemValue, isMobileOrTablet)
+        )
       );
-      composedContent.push(composeFoodMenuIllRow(foodMenuContent));
+      composedContent.push(
+        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet)
+      );
       foodMenuIllComposed = true;
     }
 
@@ -59,10 +73,13 @@ export function composeContent(obj: Record<string, any>) {
         Object.entries(obj).filter(([k]) => k.indexOf("-food-menu-image") > -1)
       );
       Object.entries(foodMenuIllItems).map(([itemKey, itemValue]) =>
-        foodMenuContent.push(composeFoodMenuImgItem(itemKey, itemValue))
+        foodMenuContent.push(
+          composeFoodMenuImgItem(itemKey, itemValue, isMobileOrTablet)
+        )
       );
-      composedContent.push(composeFoodMenuIllRow(foodMenuContent));
-      composedContent.push(<div style={{ height: "70px" }} />);
+      composedContent.push(
+        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet)
+      );
 
       foodMenuImgComposed = true;
     }
@@ -70,7 +87,7 @@ export function composeContent(obj: Record<string, any>) {
   return composedContent;
 }
 
-function composeButton(buttonText: string) {
+function composeButton(buttonText: string, isMobileOrTablet: boolean) {
   return (
     <Button
       sx={{
@@ -84,6 +101,9 @@ function composeButton(buttonText: string) {
           backgroundColor: "#b9082b",
         },
         padding: "0 23px 0 23px",
+        fontSize: isMobileOrTablet ? "11px" : "13px",
+        fontWeight: "600",
+        letterSpacing: "1px",
       }}
     >
       {buttonText}
@@ -93,11 +113,13 @@ function composeButton(buttonText: string) {
 
 function composeTitle(titleText: string) {
   return (
-    <Box>
-      <h6 className={"gan-chi-title"} style={{}}>
-        {titleText}
-      </h6>
-    </Box>
+    <FadeUp>
+      <Box>
+        <h6 className={"gan-chi-title"} style={{}}>
+          {titleText}
+        </h6>
+      </Box>
+    </FadeUp>
   );
 }
 
@@ -112,22 +134,29 @@ function composeSpaceBox() {
   );
 }
 
-function composeFoodMenuIllRow(content: JSX.Element[]) {
+function composeFoodMenuIllRow(
+  content: JSX.Element[],
+  isMobileOrTablet: boolean
+) {
   return (
-    <Box
-      display={"flex"}
-      alignItems={"center"}
-      justifyContent={"center"}
-      gap={5}
-    >
-      {content}
-    </Box>
+    <FadeUp>
+      <Box
+        display={isMobileOrTablet ? "block" : "flex"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        gap={5}
+        marginBottom={"30px"}
+      >
+        {content}
+      </Box>
+    </FadeUp>
   );
 }
 
 function composeFoodMenuIllItem(
   foodMenuIllKey: string,
-  foodMenuIllObj: Record<string, string>
+  foodMenuIllObj: Record<string, string>,
+  isMobileOrTablet: boolean
 ) {
   const illustration = (id: string) => {
     if (id?.indexOf("korean-spicy") > -1) return spicyKoreanIllustration;
@@ -135,13 +164,13 @@ function composeFoodMenuIllItem(
     if (id?.indexOf("maple-ginger") > -1) return mapleGingerIllustration;
   };
   return (
-    <Box>
+    <Box sx={{ marginBottom: isMobileOrTablet ? "30px" : "0" }}>
       <img
         style={{
-          height: "9vw",
-          width: "9vw",
+          height: isMobileOrTablet ? "auto" : "9vw",
+          width: isMobileOrTablet ? "130px" : "9vw",
           borderRadius: "500px",
-          marginBottom: "10px",
+          marginBottom: isMobileOrTablet ? "5px" : "10px",
         }}
         src={illustration(foodMenuIllKey)}
         alt={foodMenuIllKey}
@@ -157,7 +186,8 @@ function composeFoodMenuIllItem(
 
 function composeFoodMenuImgItem(
   foodMenuIllKey: string,
-  foodMenuIllObj: Record<string, string>
+  foodMenuIllObj: Record<string, string>,
+  isMobileOrTablet: boolean
 ) {
   const image = (id: string) => {
     if (id?.indexOf("korean-spicy") > -1) return spicyKoreanImg;
@@ -165,13 +195,19 @@ function composeFoodMenuImgItem(
     if (id?.indexOf("maple-ginger") > -1) return mapleGingerImg;
   };
   return (
-    <Box>
+    <Box
+      style={{
+        marginBottom: "20px",
+      }}
+    >
       <Box
         style={{
-          height: "12vw",
-          width: "12vw",
+          height: isMobileOrTablet ? "130px" : "11vw",
+          width: isMobileOrTablet ? "130px" : "11vw",
           borderRadius: "50px",
-          marginBottom: "10px",
+          margin: "auto",
+
+          marginBottom: isMobileOrTablet ? "15px" : "10px",
           backgroundImage: "url(" + image(foodMenuIllKey) + ")",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -188,12 +224,17 @@ function composeFoodMenuImgItem(
   );
 }
 
-function composeStorySection(obj: any) {
+function composeTextSection(obj: any) {
   console.log(obj);
   return (
-    <Box sx={{ paddingBottom: "40px" }}>
+    <Box sx={{ paddingBottom: "15px" }}>
       {Object.keys(obj).map(function (key, index) {
-        if (key.indexOf("-paragraph") > -1) return <div>{obj[key]}</div>;
+        if (key.indexOf("-paragraph") > -1)
+          return (
+            <FadeUp>
+              <div>{obj[key]}</div>
+            </FadeUp>
+          );
       })}
     </Box>
   );

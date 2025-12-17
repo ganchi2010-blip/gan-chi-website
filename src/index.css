@@ -47,9 +47,26 @@ code {
 
 * {
   font-family: "InstrumentSans-Regular", sans-serif !important;
+  line-height: 1.8;
+  font-size: 0.97rem;
 }
 
 .gan-chi-title {
   font-family: "PermanentMarker-Regular", sans-serif !important;
   font-size: 0.9rem;
+}
+
+@keyframes Move {
+  0% {
+    background-position: 0% 0%;
+  }
+
+  100% {
+    background-position: 10000% 0%;
+  }
+}
+
+.loader-bg {
+  animation: Move 300s ease infinite;
+  background-size: contain;
 }

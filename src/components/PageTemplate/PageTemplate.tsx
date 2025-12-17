@@ -1,6 +1,7 @@
 import { Box, Container, useMediaQuery, useTheme } from "@mui/material";
 import { composeContent } from "../../utils/composeContent.tsx";
 import bg from "../../assets/background.png";
+import FadeUp from "../FadeUp/FadeUp.js";
 
 const PageTemplate = (props: {
   mainImage: any;
@@ -17,7 +18,7 @@ const PageTemplate = (props: {
       sx={{
         position: "absolute",
         top: "0",
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 110px)",
         width: "100%",
         backgroundImage: `url(${bg})`,
         backgroundColor: "#58b6f5",
@@ -31,8 +32,8 @@ const PageTemplate = (props: {
       {/* Header placeholder */}
       <Container
         sx={{
-          mt: "3vh",
-          mb: "3vh",
+          mt: "2vh",
+          mb: "2vh",
           width: contentWidth,
           borderRadius: 2,
           padding: "0 !important",
@@ -58,28 +59,32 @@ const PageTemplate = (props: {
         }}
       >
         {/* Top section (5vh height inside container) */}
-        <Box
-          sx={{
-            borderRadius: 1,
-            marginBottom: 0,
-          }}
-        >
-          {props.mainImage}
-        </Box>
+        <FadeUp translateY={false}>
+          <Box
+            sx={{
+              borderRadius: 1,
+              marginBottom: 0,
+            }}
+          >
+            {props.mainImage}
+          </Box>
+        </FadeUp>
 
         {/* Main content area */}
         <Box
           sx={{
             minHeight: "15vh",
-            padding: "0px 24px 24px 24px",
+            padding: isMobileOrTablet
+              ? "0px 25px 25px 25px"
+              : "0px 50px 50px 50px",
           }}
         >
-          {composeContent(props.content)}
+          {composeContent(props.content, isMobileOrTablet)}
         </Box>
       </Container>
 
       {/* Fixed bottom div */}
-      <Box
+      {/* <Box
         sx={{
           position: "fixed",
           bottom: 0,
@@ -94,7 +99,7 @@ const PageTemplate = (props: {
         }}
       >
         {props.footer}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

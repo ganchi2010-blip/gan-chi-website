@@ -95,7 +95,13 @@ const Header = ({ logo, menuItems }: HeaderProps) => {
                 // onClick={item.onClick}
                 sx={{ cursor: "pointer" }}
               >
-                <ListItemText primary={label} className={ganChiTitle} />
+                <ListItemText
+                  primary={label}
+                  className={ganChiTitle}
+                  onClick={() =>
+                    navigate(label.toLowerCase().replaceAll(" ", "-"))
+                  }
+                />
               </ListItem>
             ))}
           </List>
