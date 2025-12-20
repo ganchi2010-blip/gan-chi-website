@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import { JSX } from "react";
 import spicyKoreanIllustration from "../assets/spicy-korean.jpeg";
@@ -6,7 +7,24 @@ import mapleGingerIllustration from "../assets/maple-ginger.jpeg";
 import spicyKoreanImg from "../assets/spicy-korean-img.jpg";
 import honeyGarlicImg from "../assets/honey-garlic-img.jpg";
 import mapleGingerImg from "../assets/maple-ginger-img.jpg";
+import version1badges from "../assets/Version 1 Badges 5.svg";
+import socialMediaImg from "../assets/social-media.png";
+import whatsAppIcon from "../assets/whatsapp.png";
+
 import FadeUp from "../components/FadeUp/FadeUp";
+import { Link } from "react-router-dom";
+
+function getImageSrc(value: string) {
+  switch (value) {
+    case "Version 1 Badges 5.svg":
+      return version1badges;
+    case "social-media.png":
+      return socialMediaImg;
+
+    default:
+      break;
+  }
+}
 
 export function composeContent(
   obj: Record<string, any>,
@@ -23,17 +41,26 @@ export function composeContent(
       composedContent.push(
         <FadeUp>
           <img
-            src={value.src}
-            alt={value.alt}
+            src={getImageSrc(value)}
+            alt={value}
             style={{ width: isMobileOrTablet ? "100%" : "40%" }}
           ></img>
         </FadeUp>
       );
     }
+    if (key.indexOf("how-to-order-div") > -1) {
+      composedContent.push(<FadeUp>{composeHowToOrder(value)}</FadeUp>);
+    }
 
     /// Button Component
     if (key.indexOf("-button") > -1) {
-      composedContent.push(composeButton(value, isMobileOrTablet));
+      if (key.indexOf("download-app-button") > -1) {
+        composedContent.push(
+          <Link to={"/download-app"}>
+            {composeButton(value, isMobileOrTablet)}
+          </Link>
+        );
+      } else composedContent.push(composeButton(value, isMobileOrTablet));
       composedContent.push(composeSpaceBox());
     }
 
@@ -85,6 +112,49 @@ export function composeContent(
     }
   });
   return composedContent;
+}
+
+function composeHowToOrder(obj: any) {
+  return (
+    <Box sx={{ paddingBottom: "15px" }}>
+      <FadeUp>
+        <div>{obj["order-paragraph"]}</div>
+        <Box sx={{ height: "25px" }} />
+
+        <img
+          style={{
+            display: "inline-block",
+            marginRight: "7px",
+            width: "36px",
+            verticalAlign: "bottom",
+          }}
+          alt="whatsApp Icon"
+          src={whatsAppIcon}
+        />
+
+        <div
+          style={{
+            display: "inline-block",
+          }}
+        >
+          <a
+            style={{
+              display: "inline-block",
+              fontSize: "1.4rem",
+              color: "#ffc858",
+            }}
+            href={"https://wa.me/44" + obj["order-whatsapp-number"]}
+            target="_blank"
+          >
+            {obj["order-whatsapp-number"]}
+          </a>
+        </div>
+        <Box sx={{ height: "25px" }} />
+
+        <div style={{ fontSize: "0.85rem" }}>{obj["order-instructions"]}</div>
+      </FadeUp>
+    </Box>
+  );
 }
 
 function composeButton(buttonText: string, isMobileOrTablet: boolean) {
@@ -145,7 +215,7 @@ function composeFoodMenuIllRow(
         alignItems={"center"}
         justifyContent={"center"}
         gap={5}
-        marginBottom={"30px"}
+        marginBottom={"50px"}
       >
         {content}
       </Box>

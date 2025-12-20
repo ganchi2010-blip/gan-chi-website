@@ -4,7 +4,7 @@ import { useContent } from "./databaseUtils/getContent.tsx";
 import PageTemplate from "./components/PageTemplate/PageTemplate.tsx";
 import Header from "./components/Header/Header.tsx";
 import imageLogo from "./assets/logo.png";
-import socialMediaImg from "./assets/social-media.png";
+
 import imageBanner from "./assets/banner-image-cropped.jpeg";
 import loaderBg from "./assets/loader-bg.jpg";
 import { Box } from "@mui/material";
@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   });
 
   const navigate = useNavigate();
@@ -126,10 +126,7 @@ function App() {
                   header={null}
                   mainImage={mainImage}
                   content={{
-                    "asset-image": {
-                      src: socialMediaImg,
-                      alt: "social-media-image",
-                    },
+                    "asset-image": "social-media.png",
                   }}
                 />
               }
