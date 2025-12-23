@@ -13,6 +13,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 function App() {
   const mainPageCntnt = useContent("pages", "main-page", "en");
   const menuPageCntnt = useContent("pages", "menu-page", "en");
+  const promotionPageCntnt = useContent("pages", "promotion-page", "en");
   const storyPageCntnt = useContent("pages", "story-page", "en");
   const menuItemsCntnt = useContent("header", "menu-items", "en");
   const appPageCntnt = useContent("pages", "app-page", "en");
@@ -98,7 +99,16 @@ function App() {
                 />
               }
             />
-
+            <Route
+              path="/promotions"
+              element={
+                <PageTemplate
+                  header={null}
+                  mainImage={mainImage}
+                  content={promotionPageCntnt}
+                />
+              }
+            />
             <Route
               path="/our-menu"
               element={
