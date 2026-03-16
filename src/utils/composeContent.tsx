@@ -16,25 +16,38 @@ import { Link } from "react-router-dom";
 
 function getImageSrc(value: string) {
   switch (value) {
+    case "Spicy Korean Image":
+      return spicyKoreanImg;
+    case "Honey Garlic Image":
+      return honeyGarlicImg;
+    case "Maple Ginger Image":
+      return mapleGingerImg;
     case "Version 1 Badges 5.svg":
       return version1badges;
     case "social-media.png":
       return socialMediaImg;
-
     default:
-      break;
+      return value;
   }
 }
 
 export function composeContent(
   obj: Record<string, any>,
-  isMobileOrTablet: boolean
+  isMobileOrTablet: boolean,
 ) {
   let composedContent: JSX.Element[] = [];
   let foodMenuIllComposed = false;
   let foodMenuImgComposed = false;
 
   Object.entries(obj).map(([key, value]) => {
+    // Grid Section Component
+    if (key.indexOf("-grid-section") > -1) {
+      composedContent.push(
+        <FadeUp key={key}>
+          {composeGridSection(value, isMobileOrTablet)}
+        </FadeUp>,
+      );
+    }
     ///
     /// Asset Image
     if (key.indexOf("asset-image") > -1) {
@@ -45,7 +58,7 @@ export function composeContent(
             alt={value}
             style={{ width: isMobileOrTablet ? "100%" : "40%" }}
           ></img>
-        </FadeUp>
+        </FadeUp>,
       );
     }
     if (key.indexOf("how-to-order-div") > -1) {
@@ -58,7 +71,7 @@ export function composeContent(
         composedContent.push(
           <Link to={"/download-app"}>
             {composeButton(value, isMobileOrTablet)}
-          </Link>
+          </Link>,
         );
       } else composedContent.push(composeButton(value, isMobileOrTablet));
       composedContent.push(composeSpaceBox());
@@ -79,16 +92,16 @@ export function composeContent(
       let foodMenuContent: JSX.Element[] = [];
       const foodMenuIllItems = Object.fromEntries(
         Object.entries(obj).filter(
-          ([k]) => k.indexOf("-food-menu-illustrated") > -1
-        )
+          ([k]) => k.indexOf("-food-menu-illustrated") > -1,
+        ),
       );
       Object.entries(foodMenuIllItems).map(([itemKey, itemValue]) =>
         foodMenuContent.push(
-          composeFoodMenuIllItem(itemKey, itemValue, isMobileOrTablet)
-        )
+          composeFoodMenuIllItem(itemKey, itemValue, isMobileOrTablet),
+        ),
       );
       composedContent.push(
-        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet)
+        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet),
       );
       foodMenuIllComposed = true;
     }
@@ -97,21 +110,90 @@ export function composeContent(
     if (key.indexOf("-food-menu-image") > -1 && !foodMenuImgComposed) {
       let foodMenuContent: JSX.Element[] = [];
       const foodMenuIllItems = Object.fromEntries(
-        Object.entries(obj).filter(([k]) => k.indexOf("-food-menu-image") > -1)
+        Object.entries(obj).filter(([k]) => k.indexOf("-food-menu-image") > -1),
       );
       Object.entries(foodMenuIllItems).map(([itemKey, itemValue]) =>
         foodMenuContent.push(
-          composeFoodMenuImgItem(itemKey, itemValue, isMobileOrTablet)
-        )
+          composeFoodMenuImgItem(itemKey, itemValue, isMobileOrTablet),
+        ),
       );
       composedContent.push(
-        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet)
+        composeFoodMenuIllRow(foodMenuContent, isMobileOrTablet),
       );
 
       foodMenuImgComposed = true;
     }
   });
   return composedContent;
+}
+
+function composeGridSection(obj: any, isMobileOrTablet: boolean) {
+  // Determine columns from config or default to 2
+  const cols = obj.config?.columns || 2;
+  const gridColumns = isMobileOrTablet ? "1fr" : `repeat(${cols}, 1fr)`;
+
+  // Filter out the config key to get only items
+  const items = Object.entries(obj).filter(([k]) => k.startsWith("item-"));
+
+  return (
+    <Box
+      sx={{
+        display: "grid",
+        gridTemplateColumns: gridColumns,
+        gap: 3,
+        paddingY: "30px",
+      }}
+    >
+      {items.map(([itemKey, itemValue]: [string, any]) => (
+        <Box
+          key={itemKey}
+          sx={{
+            backgroundColor: "#f5f2f2",
+            borderRadius: "12px",
+            overflow: "hidden",
+            boxShadow: "0px 4px 10px rgba(0,0,0,0.05)",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Image */}
+          {itemValue.image && (
+            <Box
+              sx={{
+                height: "150px",
+                backgroundImage: `url(${getImageSrc(itemValue.image)})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          )}
+
+          {/* Card Body */}
+          <Box sx={{ p: 2 }}>
+            <h4 style={{ margin: "0 0 8px 0", color: "#333" }}>
+              {itemValue.title}
+            </h4>
+
+            {/* Dynamic Details */}
+            {itemValue.details?.map((detail: string, i: number) => (
+              <div
+                key={i}
+                style={{
+                  color: "gray",
+                  fontSize: "0.85rem",
+                  marginBottom: "4px",
+                  lineHeight: "1.2",
+                }}
+              >
+                • {detail}
+              </div>
+            ))}
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  );
 }
 
 function composeHowToOrder(obj: any) {
@@ -206,7 +288,7 @@ function composeSpaceBox() {
 
 function composeFoodMenuIllRow(
   content: JSX.Element[],
-  isMobileOrTablet: boolean
+  isMobileOrTablet: boolean,
 ) {
   return (
     <FadeUp>
@@ -226,7 +308,7 @@ function composeFoodMenuIllRow(
 function composeFoodMenuIllItem(
   foodMenuIllKey: string,
   foodMenuIllObj: Record<string, string>,
-  isMobileOrTablet: boolean
+  isMobileOrTablet: boolean,
 ) {
   const illustration = (id: string) => {
     if (id?.indexOf("korean-spicy") > -1) return spicyKoreanIllustration;
@@ -257,7 +339,7 @@ function composeFoodMenuIllItem(
 function composeFoodMenuImgItem(
   foodMenuIllKey: string,
   foodMenuIllObj: Record<string, string>,
-  isMobileOrTablet: boolean
+  isMobileOrTablet: boolean,
 ) {
   const image = (id: string) => {
     if (id?.indexOf("korean-spicy") > -1) return spicyKoreanImg;
